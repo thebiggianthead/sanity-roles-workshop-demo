@@ -23,7 +23,9 @@ export default defineConfig({
   ],
 
   document: {
-    newDocumentOptions: (prev) => {
+    newDocumentOptions: (prev, context) => {
+      const roles = context?.currentUser?.roles.map((r) => r.name)
+      if (roles?.includes('administrator')) return prev
       return prev.filter((templateItem) => templateItem.templateId !== 'article')
     },
   },

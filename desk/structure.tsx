@@ -15,12 +15,12 @@ function defineStructure<StructureType>(
 }
 
 const createAllStoreOffers = defineStructure<(ListItemBuilder | undefined)[]>((S, context) => {
-  const roleNames = context?.currentUser?.roles.map((r) => r.name)
+  const roles = context?.currentUser?.roles.map((r) => r.name)
 
   return (
     stores
       .map((store) => {
-        if (roleNames?.includes(`${store.id}-manager`) || roleNames?.includes('administrator')) {
+        if (roles?.includes(`${store.id}-manager`) || roles?.includes('administrator')) {
           return S.listItem()
             .title(store.name)
             .icon(HomeIcon)
@@ -42,8 +42,8 @@ const createAllStoreOffers = defineStructure<(ListItemBuilder | undefined)[]>((S
 
 const createArticleList = defineStructure<DocumentListBuilder>((S, context) => {
   const user = context?.currentUser
-  const roleNames = user?.roles.map((r) => r.name)
-  const isLimited = roleNames?.includes('my-article-creator')
+  const roles = user?.roles.map((r) => r.name)
+  const isLimited = roles?.includes('my-article-creator')
   let userQuery = ``
 
   if (isLimited) {
@@ -58,7 +58,6 @@ const createArticleList = defineStructure<DocumentListBuilder>((S, context) => {
     .params({userId: user?.id})
     .apiVersion('2023-01-01')
     .initialValueTemplates([S.initialValueTemplateItem('article-with-author')])
-    .canHandleIntent((intentName) => intentName !== 'create')
 })
 
 export const structure: StructureResolver = (S, context) =>
