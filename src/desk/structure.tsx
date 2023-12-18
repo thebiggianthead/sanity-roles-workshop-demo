@@ -2,6 +2,7 @@ import {DocumentsIcon, HomeIcon, TagIcon} from '@sanity/icons'
 import type {ConfigContext} from 'sanity'
 import type {
   DocumentListBuilder,
+  ListItem,
   ListItemBuilder,
   StructureBuilder,
   StructureResolver,
@@ -23,7 +24,7 @@ const createAllStoreOffers = defineStructure<(ListItemBuilder | undefined)[]>((S
       .map((store) => {
         if (roles?.includes(`${store.id}-manager`) || roles?.includes('administrator')) {
           return S.listItem()
-            .title(store.name)
+            .title(`${store.name} Offers`)
             .icon(HomeIcon)
             .child(
               S.documentTypeList('offer')
@@ -39,6 +40,27 @@ const createAllStoreOffers = defineStructure<(ListItemBuilder | undefined)[]>((S
       })
       .filter((item) => !!item) || []
   )
+})
+
+const createOffers = defineStructure<ListItemBuilder | undefined>((S, context) => {
+  const roles = context?.currentUser?.roles.map((r) => r.name)
+  const storeRolesCount = roles?.filter((r) => r.endsWith('-manager')).length
+
+  if ((storeRolesCount && storeRolesCount > 1) || roles?.includes('administrator')) {
+    return S.listItem()
+      .title('Offers')
+      .icon(TagIcon)
+      .child(
+        S.list()
+          .title('Offers')
+          .items(createAllStoreOffers(S, context) as ListItemBuilder[]),
+      )
+  } else if (storeRolesCount == 1) {
+    console.log('just one!')
+    return [...createAllStoreOffers(S, context)][0]
+  }
+
+  return []
 })
 
 const createArticleList = defineStructure<DocumentListBuilder>((S, context) => {
@@ -71,12 +93,5 @@ export const structure: StructureResolver = (S, context) =>
         .icon(DocumentsIcon)
         .schemaType('article')
         .child(createArticleList(S, context)),
-      S.listItem()
-        .title('Offers')
-        .icon(TagIcon)
-        .child(
-          S.list()
-            .title('Offers')
-            .items(createAllStoreOffers(S, context) as ListItemBuilder[]),
-        ),
+      createOffers(S, context) as ListItemBuilder | ListItem,
     ])
