@@ -14,6 +14,8 @@ export default defineType({
       name: 'createdBy',
       title: 'Created By',
       type: 'string',
+      readOnly: (context) =>
+        !context.currentUser?.roles.flatMap((r) => r.name).includes('administrator'),
     }),
   ],
 })

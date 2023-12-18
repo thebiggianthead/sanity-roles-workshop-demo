@@ -18,6 +18,10 @@ export default function StoreInput(props: StringInputProps) {
 
   return props.renderDefault({
     ...props,
-    schemaType: {...props.schemaType, options: {...props.schemaType.options, list: newOptions}},
+    schemaType: {
+      ...props.schemaType,
+      options: {...props.schemaType.options, list: newOptions},
+    },
+    readOnly: true,
   })
 }
