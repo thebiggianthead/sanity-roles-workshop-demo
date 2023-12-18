@@ -1,10 +1,11 @@
+import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {deskTool} from 'sanity/desk'
-import {visionTool} from '@sanity/vision'
-import {schemaTypes} from './schemas'
 import {unsplashImageAsset} from 'sanity-plugin-asset-source-unsplash'
 import {media} from 'sanity-plugin-media'
-import {structure} from './desk/structure'
+
+import {structure} from './src/desk/structure'
+import {schemaTypes} from './src/schemaTypes'
 
 export default defineConfig({
   name: 'default',

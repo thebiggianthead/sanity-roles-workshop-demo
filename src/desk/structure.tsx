@@ -1,15 +1,16 @@
+import {DocumentsIcon, HomeIcon, TagIcon} from '@sanity/icons'
+import type {ConfigContext} from 'sanity'
 import type {
-  ListItemBuilder,
-  StructureResolver,
-  StructureBuilder,
   DocumentListBuilder,
+  ListItemBuilder,
+  StructureBuilder,
+  StructureResolver,
 } from 'sanity/desk'
-import {ConfigContext} from 'sanity'
-import {DocumentsIcon, TagIcon, HomeIcon} from '@sanity/icons'
+
 import {stores} from '../lib/constants'
 
 function defineStructure<StructureType>(
-  factory: (S: StructureBuilder, context: ConfigContext) => StructureType
+  factory: (S: StructureBuilder, context: ConfigContext) => StructureType,
 ) {
   return factory
 }
@@ -32,7 +33,7 @@ const createAllStoreOffers = defineStructure<(ListItemBuilder | undefined)[]>((S
                 .apiVersion('2023-01-01')
                 .initialValueTemplates([
                   S.initialValueTemplateItem('offer-by-store', {store: store.id}),
-                ])
+                ]),
             )
         }
       })
@@ -76,6 +77,6 @@ export const structure: StructureResolver = (S, context) =>
         .child(
           S.list()
             .title('Offers')
-            .items(createAllStoreOffers(S, context) as ListItemBuilder[])
+            .items(createAllStoreOffers(S, context) as ListItemBuilder[]),
         ),
     ])

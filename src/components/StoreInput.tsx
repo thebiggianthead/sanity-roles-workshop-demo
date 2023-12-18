@@ -1,5 +1,5 @@
-import {type StringInputProps, type TitledListValue, useCurrentUser} from 'sanity'
 import {useMemo} from 'react'
+import {type StringInputProps, type TitledListValue, useCurrentUser} from 'sanity'
 
 export default function StoreInput(props: StringInputProps) {
   const roles = useCurrentUser()?.roles.flatMap((r) => r.name)
@@ -8,7 +8,7 @@ export default function StoreInput(props: StringInputProps) {
     return (props?.schemaType?.options?.list as Array<TitledListValue<'string'>>)?.filter(
       (option) => {
         return roles?.includes(`${option.value}-manager`)
-      }
+      },
     )
   }, [props?.schemaType?.options?.list, roles])
 
