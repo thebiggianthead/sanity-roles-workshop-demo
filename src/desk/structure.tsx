@@ -6,7 +6,7 @@ import type {
   ListItemBuilder,
   StructureBuilder,
   StructureResolver,
-} from 'sanity/desk'
+} from 'sanity/structure'
 
 import {stores} from '../lib/constants'
 
@@ -56,11 +56,10 @@ const createOffers = defineStructure<ListItemBuilder | undefined>((S, context) =
           .items(createAllStoreOffers(S, context) as ListItemBuilder[]),
       )
   } else if (storeRolesCount == 1) {
-    console.log('just one!')
     return [...createAllStoreOffers(S, context)][0]
   }
 
-  return []
+  return S.listItem().title('No offers!').id('nope').icon(TagIcon)
 })
 
 const createArticleList = defineStructure<DocumentListBuilder>((S, context) => {

@@ -1,6 +1,6 @@
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
-import {deskTool} from 'sanity/desk'
+import {structureTool} from 'sanity/structure'
 import {unsplashImageAsset} from 'sanity-plugin-asset-source-unsplash'
 import {media} from 'sanity-plugin-media'
 
@@ -15,7 +15,7 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
-    deskTool({
+    structureTool({
       structure,
     }),
     visionTool(),
