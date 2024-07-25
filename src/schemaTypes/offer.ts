@@ -1,6 +1,7 @@
 import {defineField, defineType} from 'sanity'
 
-import StoreInput from '../components/storeInput'
+import StoreInput from '../components/StoreInput'
+import {stores} from '../lib/constants'
 
 export default defineType({
   name: 'offer',
@@ -22,10 +23,12 @@ export default defineType({
       title: 'Store',
       type: 'string',
       options: {
-        list: [
-          {title: 'Store 1', value: 'store1'},
-          {title: 'Store 2', value: 'store2'},
-        ],
+        list: stores.map((store) => {
+          return {
+            value: store.id,
+            title: store.name,
+          }
+        }),
       },
       components: {
         input: StoreInput,
