@@ -6,4 +6,5 @@ export default defineCliConfig({
     dataset: 'production',
   },
   autoUpdates: false,
+  studioHost: 'roles-workshop',
 })
