@@ -16,12 +16,12 @@ It's demonstrates a few things:
 On an Enterprise Sanity plan, you can configure custom roles and resources. For this Studio, the roles setup should look something like:
 
 - Create 3 roles with the below config:
-  - Title: `Store 1 Manager`, ID: `store1-manager`
-  - Title: `Store 1 Manager`, ID: `store2-manager`
+  - Title: `Store 1 Manager`, ID: `store-1-manager`
+  - Title: `Store 1 Manager`, ID: `store-2-manager`
   - Title: `My Article Creator`, ID: `created-by-user`
 - Create 3 resources with the below config:
-  - Name: `Store 1`, ID: as generated, GROQ filter: `store == "store1”`
-  - Name: `Store 2`, ID: as generated, GROQ filter: `store == "store2”`
+  - Name: `Store 1`, ID: as generated, GROQ filter: `store == "store-1”`
+  - Name: `Store 2`, ID: as generated, GROQ filter: `store == "store-2”`
   - Name: `Created by user`, ID: as generated, GROQ filter: `createdBy == identity() || createdBy == $identity`
 - Apply each of the resources to the relevant roles with permissions as desired.
 - Assign these roles to multiple users.
