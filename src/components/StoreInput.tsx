@@ -1,39 +1,40 @@
-import {Card, Text} from '@sanity/ui'
-import {useMemo} from 'react'
-import {type StringInputProps, type TitledListValue, useCurrentUser, userHasRole} from 'sanity'
+import {Button, Grid, Text} from '@sanity/ui'
+import {useCallback} from 'react'
+import {set, type StringInputProps, type TitledListValue, useCurrentUser, userHasRole} from 'sanity'
 
 export default function StoreInput(props: StringInputProps) {
+  const {value, onChange, schemaType} = props
+
   const user = useCurrentUser()
   const roles = user?.roles.flatMap((r) => r.name)
 
-  const newOptions = useMemo(() => {
-    return (props?.schemaType?.options?.list as Array<TitledListValue<'string'>>)?.filter(
-      (option) => {
-        return roles?.includes(`${option.value}-manager`)
-      },
-    )
-  }, [props?.schemaType?.options?.list, roles])
-
-  if (userHasRole(user, 'administrator')) {
-    return props.renderDefault(props)
-  }
-
-  if (newOptions.length == 1) {
-    return (
-      <Card tone="primary" padding={3} border radius={2}>
-        <Text size={1}>
-          This offer is for your store:{' '}
-          {newOptions.find((option) => option.value == props.value)?.title}
-        </Text>
-      </Card>
-    )
-  }
-
-  return props.renderDefault({
-    ...props,
-    schemaType: {
-      ...props.schemaType,
-      options: {...props.schemaType.options, list: newOptions},
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      const nextValue = event.currentTarget.value
+      onChange(set(nextValue))
     },
-  })
+    [onChange],
+  )
+
+  const stores = (schemaType?.options?.list as Array<TitledListValue<'string'>>)?.filter(
+    (option) => {
+      return roles?.includes(`${option.value}-manager`) || userHasRole(user, 'administrator')
+    },
+  )
+
+  return (
+    <Grid columns={stores.length} gap={3}>
+      {stores?.map((store) => (
+        <Button
+          key={store.value}
+          value={store.value}
+          mode={value === store.value ? `default` : `ghost`}
+          tone={value === store.value ? `primary` : `default`}
+          onClick={handleClick}
+        >
+          <Text size={1}>{store.title}</Text>
+        </Button>
+      ))}
+    </Grid>
+  )
 }

@@ -29,6 +29,7 @@ export default defineType({
             title: store.name,
           }
         }),
+        layout: 'radio',
       },
       components: {
         input: StoreInput,

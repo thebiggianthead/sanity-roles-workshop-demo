@@ -5,6 +5,6 @@ export default defineCliConfig({
     projectId: 'uvxetc8v',
     dataset: 'production',
   },
-  autoUpdates: false,
+  autoUpdates: true,
   studioHost: 'roles-workshop',
 })
