@@ -1,13 +1,8 @@
 import {DocumentsIcon, HomeIcon, TagIcon} from '@sanity/icons'
 import type {ConfigContext} from 'sanity'
-import type {
-  DocumentListBuilder,
-  ListItemBuilder,
-  StructureBuilder,
-  StructureResolver,
-} from 'sanity/structure'
+import type {DocumentListBuilder, ListItemBuilder, StructureBuilder} from 'sanity/structure'
 
-import {stores} from '../lib/constants'
+import {type Store, stores} from '../lib/constants'
 
 const API_VERSION = '2023-01-01'
 
@@ -17,8 +12,8 @@ function defineStructure<StructureType>(
   return factory
 }
 
-export const structure: StructureResolver = (S, context) =>
-  S.list()
+export const structure = (S: StructureBuilder, context: ConfigContext, store: Store) => {
+  return S.list()
     .id('root')
     .title('Content')
     .items([
@@ -27,8 +22,21 @@ export const structure: StructureResolver = (S, context) =>
         .icon(DocumentsIcon)
         .schemaType('article')
         .child(createArticleList(S, context)),
-      ...[createOffers(S, context) as ListItemBuilder].filter(Boolean),
+      S.listItem()
+        .title(`${store.name} Offers`)
+        .icon(HomeIcon)
+        .child(
+          S.documentTypeList('offer')
+            .title(`${store.name} Offers`)
+            .filter(`_type == "offer" && store == $storeId`)
+            .params({storeId: store.id})
+            .apiVersion(API_VERSION)
+            .initialValueTemplates([
+              S.initialValueTemplateItem('offer-by-store', {store: store.id}),
+            ]),
+        ),
     ])
+}
 
 const createArticleList = defineStructure<DocumentListBuilder>((S, context) => {
   const user = context?.currentUser
